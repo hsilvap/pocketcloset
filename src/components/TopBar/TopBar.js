@@ -1,7 +1,6 @@
 import React from 'react'
-import { GoogleAuthProvider } from 'firebase/auth'
 
-import db from '../../db'
+//import db from '../../db'
 
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -12,13 +11,13 @@ import { StoreContext } from '../../context/store'
 const TopBar = () => {
   const { state, dispatch } = React.useContext(StoreContext)
 
-  const signIn = React.useCallback(() => {
-    var provider = new GoogleAuthProvider()
-    db.auth().signInWithPopup(provider)
-  }, [])
-  const signOut = React.useCallback(() => {
-    db.auth().signOut()
-  }, [])
+  // const signIn = React.useCallback(() => {
+  //   var provider = new GoogleAuthProvider()
+  //   db.auth().signInWithPopup(provider)
+  // }, [])
+  // const signOut = React.useCallback(() => {
+  //   db.auth().signOut()
+  // }, [])
 
   return (
     <AppBar position='relative'>
@@ -40,10 +39,10 @@ const TopBar = () => {
                 </span>
               </div>
 
-              <Button onClick={signOut}>Sign-out</Button>
+              <Button onClick={() => {}}>Sign-out</Button>
             </>
           ) : (
-            <Button onClick={() => signIn()}>
+            <Button onClick={() => {}}>
               <Icon>fingerprint</Icon> &nbsp; Sign-in with Google
             </Button>
           )}
