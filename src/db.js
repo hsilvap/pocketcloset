@@ -7,7 +7,7 @@ import { getAuth } from 'firebase/auth'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  apiKey: 'AIzaSyCF8Nx6KkB0svOLuHoMyZtQTKoHdfULQwY',
   authDomain: 'pocketcloset-345616.firebaseapp.com',
   databaseURL: 'https://pocketcloset-345616-default-rtdb.firebaseio.com',
   projectId: 'pocketcloset-345616',
@@ -18,4 +18,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
-const auth = getAuth(app)
+export default app
+export const auth = getAuth(app)
+export const getCurrentUser = () => auth.currentUser
