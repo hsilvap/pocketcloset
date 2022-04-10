@@ -1,11 +1,11 @@
 import './App.css'
-import Landing from './pages/Landing/Landing'
 import { StoreProvider } from './context/store'
+import PocketClosetRouter from './pages/Routes'
 
 function App () {
   return (
     <StoreProvider>
-      <Landing />
+      <PocketClosetRouter />
     </StoreProvider>
   )
 }

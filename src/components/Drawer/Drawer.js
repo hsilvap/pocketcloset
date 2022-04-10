@@ -3,7 +3,6 @@ import React from 'react'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
 import {
   Box,
-  ClickAwayListener,
   Divider,
   List,
   ListItem,
@@ -19,20 +18,33 @@ import {
   AiOutlineWallet,
   AiOutlineCloudUpload
 } from 'react-icons/ai'
+import { useNavigate } from 'react-router-dom'
+import { ROUTES } from '../../constants'
+
 const ACTIONS = [
-  { text: 'My closet', destination: '', icon: <AiOutlineInstagram /> },
-  { text: 'My tops', destination: '', icon: <AiOutlineSkin /> },
-  { text: 'My bottoms', destination: '', icon: <AiOutlineTag /> }
+  {
+    text: 'My closet',
+    destination: ROUTES.MY_CLOSET,
+    icon: <AiOutlineInstagram />
+  },
+  { text: 'My tops', destination: ROUTES.TOPS, icon: <AiOutlineSkin /> },
+  { text: 'My bottoms', destination: ROUTES.BOTTOMS, icon: <AiOutlineTag /> }
 ]
 const SECONDARY_ACTIONS = [
-  { text: 'Upload clothes', destination: '', icon: <AiOutlineCloudUpload /> },
+  {
+    text: 'Upload clothes',
+    destination: ROUTES.UPLOAD,
+    icon: <AiOutlineCloudUpload />
+  },
   {
     text: 'Check if I already have something similar',
-    destination: '',
+    destination: ROUTES.COMPARE,
     icon: <AiOutlineWallet />
   }
 ]
 const Drawer = React.memo(() => {
+  const navigate = useNavigate()
+
   const { state, dispatch } = UseStoreContext()
   const handleOpenDrawer = React.useCallback(() => {
     dispatch({ type: StoreActions.OPEN_DRAWER })
@@ -42,36 +54,51 @@ const Drawer = React.memo(() => {
     dispatch({ type: StoreActions.CLOSE_DRAWER })
   }, [dispatch])
 
-  const handleActionClick = React.useCallback(() => [], {})
+  const handleActionClick = React.useCallback(
+    destination => {
+      navigate(`/${destination}`)
+    },
+    [navigate]
+  )
   return (
-    <ClickAwayListener>
-      <SwipeableDrawer
-        anchor={'left'}
-        open={state.drawerOpen}
-        onClose={handleCloseDrawer}
-        onOpen={handleOpenDrawer}
-      >
-        <Box sx={{ width: 250 }} role='presentation'>
-          <List>
-            {ACTIONS.map(item => (
-              <ListItem button key={item.text}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {SECONDARY_ACTIONS.map(item => (
-              <ListItem button key={item.text}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </SwipeableDrawer>
-    </ClickAwayListener>
+    <SwipeableDrawer
+      anchor={'left'}
+      open={state.drawerOpen}
+      onClose={handleCloseDrawer}
+      onOpen={handleOpenDrawer}
+    >
+      <Box sx={{ width: 250 }} role='presentation'>
+        <List>
+          {ACTIONS.map(item => (
+            <ListItem
+              button
+              key={item.text}
+              onClick={() => {
+                handleActionClick(item.destination)
+              }}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {SECONDARY_ACTIONS.map(item => (
+            <ListItem
+              button
+              key={item.text}
+              onClick={() => {
+                handleActionClick(item.destination)
+              }}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+    </SwipeableDrawer>
   )
 })
 export default Drawer
