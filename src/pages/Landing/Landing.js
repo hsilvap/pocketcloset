@@ -10,6 +10,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import TopBar from '../../components/TopBar/TopBar'
 import { LoadUserInfo } from '../../hooks/useDb'
+import { UseStoreContext } from '../../context/store'
+import { StoreActions } from '../../context/reducer'
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { auth } from './../../db'
 
 const useStyles = makeStyles(theme => ({
   icon: {
@@ -65,6 +69,18 @@ const cards = [
 
 export default function Landing () {
   const classes = useStyles()
+  const { state, dispatch } = UseStoreContext()
+
+  const handleGetStartedClick = React.useCallback(() => {
+    if (state.loggedIn) {
+      dispatch({ type: StoreActions.OPEN_DRAWER })
+    } else {
+      signInWithPopup(auth, new GoogleAuthProvider()).then(() =>
+        dispatch({ type: StoreActions.OPEN_DRAWER })
+      )
+    }
+  }, [dispatch, state.loggedIn])
+
   LoadUserInfo()
   return (
     <React.Fragment>
@@ -95,7 +111,11 @@ export default function Landing () {
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justifyContent='center'>
                 <Grid item>
-                  <Button variant='contained' color='primary'>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    onClick={handleGetStartedClick}
+                  >
                     Get started
                   </Button>
                 </Grid>

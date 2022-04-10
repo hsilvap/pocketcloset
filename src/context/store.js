@@ -3,6 +3,7 @@ import { StoreReducer } from './reducer'
 
 export const initialState = {
   loggedIn: false,
+  drawerOpen: false,
   user: {}
 }
 
@@ -16,3 +17,5 @@ export const StoreProvider = ({ children }) => {
     </StoreContext.Provider>
   )
 }
+
+export const UseStoreContext = () => React.useContext(StoreContext)
