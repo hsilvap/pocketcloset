@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -15,6 +16,7 @@ import { auth } from './../../db'
 import Drawer from '../Drawer/Drawer'
 
 const TopBar = () => {
+  const navigate = useNavigate()
   const { state, dispatch } = UseStoreContext()
   const [anchorEl, setAnchorEl] = React.useState(null)
 
@@ -54,7 +56,12 @@ const TopBar = () => {
             >
               <AiOutlineMenu />
             </IconButton>
-            <Typography variant='h6' component='div' style={{ flexGrow: 1 }}>
+            <Typography
+              variant='h6'
+              component='div'
+              style={{ flexGrow: 1, cursor: 'pointer' }}
+              onClick={() => navigate('/')}
+            >
               PocketCloset
             </Typography>
             {!!state.loggedIn ? (

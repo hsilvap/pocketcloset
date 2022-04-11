@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
 import {
@@ -18,7 +19,6 @@ import {
   AiOutlineWallet,
   AiOutlineCloudUpload
 } from 'react-icons/ai'
-import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../constants'
 
 const ACTIONS = [
@@ -56,9 +56,10 @@ const Drawer = React.memo(() => {
 
   const handleActionClick = React.useCallback(
     destination => {
+      dispatch({ type: StoreActions.CLOSE_DRAWER })
       navigate(`/${destination}`)
     },
-    [navigate]
+    [navigate, dispatch]
   )
   return (
     <SwipeableDrawer
