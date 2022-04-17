@@ -29,10 +29,6 @@ const Upload = () => {
     text: ''
   })
 
-  const onDropBottoms = picture => {
-    setBottoms([...picture])
-  }
-
   const uploadTops = React.useCallback(
     async tops => {
       setIsUploading(true)
@@ -42,6 +38,27 @@ const Upload = () => {
           await uploadBytes(storageRef, file)
         }
         setRequestStatus({ open: true, text: 'Top(s) saved!' })
+      } catch (error) {
+        setRequestStatus({ open: true, text: 'There was an error: ' + error })
+      } finally {
+        setIsUploading(false)
+      }
+    },
+    [storage, state.user]
+  )
+
+  const uploadBottoms = React.useCallback(
+    async tops => {
+      setIsUploading(true)
+      try {
+        for (const file of tops) {
+          const storageRef = ref(
+            storage,
+            `${state.user.uid}/bottoms/${file.name}`
+          )
+          await uploadBytes(storageRef, file)
+        }
+        setRequestStatus({ open: true, text: 'Bottom(s) saved!' })
       } catch (error) {
         setRequestStatus({ open: true, text: 'There was an error: ' + error })
       } finally {
@@ -70,6 +87,25 @@ const Upload = () => {
     [state.user, storage]
   )
 
+  const deleteBottom = React.useCallback(
+    async file => {
+      setIsUploading(true)
+      try {
+        const fileDeleteRef = ref(
+          storage,
+          `${state.user.uid}/bottoms/${file.name}`
+        )
+        await deleteObject(fileDeleteRef)
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setRequestStatus({ open: true, text: 'Bottom deleted!' })
+        setIsUploading(false)
+      }
+    },
+    [state.user, storage]
+  )
+
   const onDropTops = React.useCallback(
     async picture => {
       if (picture.length < tops.length) {
@@ -85,6 +121,23 @@ const Upload = () => {
       setTops([...picture])
     },
     [tops, deleteTop, uploadTops]
+  )
+
+  const onDropBottoms = React.useCallback(
+    async picture => {
+      if (picture.length < bottoms.length) {
+        for (let i = 0; i < bottoms.length; i++) {
+          const exists = picture.find(x => x.name === bottoms[i].name)
+          if (!exists) {
+            deleteBottom(bottoms[i])
+          }
+        }
+      } else {
+        uploadBottoms(picture)
+      }
+      setBottoms([...picture])
+    },
+    [bottoms, deleteBottom, uploadBottoms]
   )
 
   return (
