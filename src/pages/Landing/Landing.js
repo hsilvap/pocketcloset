@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import TopBar from '../../components/TopBar/TopBar'
-import { LoadUserInfo } from '../../hooks/useDb'
 import { UseStoreContext } from '../../context/store'
 import { StoreActions } from '../../context/reducer'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
@@ -80,7 +79,6 @@ export default function Landing () {
     }
   }, [dispatch, state.loggedIn])
 
-  LoadUserInfo()
   return (
     <React.Fragment>
       <TopBar />

@@ -1,10 +1,12 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ROUTES } from '../constants'
+import { LoadUserInfo } from '../hooks/useDb'
 import Landing from './Landing/Landing'
 import Upload from './Upload/Upload'
 
 const PocketClosetRouter = () => {
+  LoadUserInfo()
   return (
     <BrowserRouter>
       <Routes>

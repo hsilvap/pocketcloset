@@ -45,7 +45,7 @@ export function LoadCloset () {
     const topsQuerySnapshot = await getDocs(
       collection(db, 'closets', getCurrentUser().uid, 'tops')
     )
-    bottomsQuerySnapshot.forEach(doc => {
+    topsQuerySnapshot.forEach(doc => {
       console.log(doc.id, ' => ', doc.data())
     })
   }
