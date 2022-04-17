@@ -1,5 +1,6 @@
 import React from 'react'
-import { collection, query, where, getDocs, doc } from 'firebase/firestore'
+import { collection, query } from 'firebase/firestore'
+import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage'
 import { StoreContext } from '../context/store'
 import { StoreActions } from '../context/reducer'
 import { auth, getCurrentUser, db } from '../db'
@@ -31,57 +32,82 @@ export function LoadUserInfo () {
   }, [dispatch])
 }
 
-export function LoadCloset () {
+export function LoadBottoms () {
   const { dispatch } = React.useContext(StoreContext)
+  const storage = getStorage()
 
-  const loadStuff = async () => {
-    const bottomsQuerySnapshot = await getDocs(
-      collection(db, 'closets', getCurrentUser().uid, 'bottoms')
-    )
-    bottomsQuerySnapshot.forEach(doc => {
-      console.log(doc.id, ' => ', doc.data())
-    })
+  const loadBottoms = async () => {
+    const listRef = ref(storage, `${getCurrentUser().uid}/bottoms`)
+    // Find all the prefixes and items.
+    listAll(listRef)
+      .then(res => {
+        res.prefixes.forEach(folderRef => {
+          // All the prefixes under listRef.
+          // You may call listAll() recursively on them.
+        })
+        res.items.forEach(itemRef => {
+          console.log(itemRef.fullPath)
+          const fileRef = ref(storage, itemRef.fullPath)
 
-    const topsQuerySnapshot = await getDocs(
-      collection(db, 'closets', getCurrentUser().uid, 'tops')
-    )
-    topsQuerySnapshot.forEach(doc => {
-      console.log(doc.id, ' => ', doc.data())
-    })
+          // Get the download URL
+          getDownloadURL(fileRef).then(url => {
+            console.log(url)
+            // Insert url into an <img> tag to "download"
+          })
+          // All the items under listRef.
+        })
+      })
+      .catch(error => {
+        // Uh-oh, an error occurred!
+      })
   }
   React.useEffect(() => {
     auth.onAuthStateChanged(user => {
       if (user) {
-        loadStuff()
+        loadBottoms()
       }
     })
-    return () => query
+    //eslint-disable-next-line
   }, [dispatch])
 }
 
 export function LoadTops () {
   const { dispatch } = React.useContext(StoreContext)
+  const storage = getStorage()
 
+  const loadTops = async () => {
+    const tops = []
+    const listRef = ref(storage, `${getCurrentUser().uid}/tops`)
+    // Find all the prefixes and items.
+    listAll(listRef)
+      .then(res => {
+        res.prefixes.forEach(folderRef => {
+          // All the prefixes under listRef.
+          // You may call listAll() recursively on them.
+        })
+        res.items.forEach(itemRef => {
+          console.log(itemRef.fullPath, itemRef.name)
+          const fileRef = ref(storage, itemRef.fullPath)
+
+          // Get the download URL
+          getDownloadURL(fileRef).then(url => {
+            console.log(url)
+            console.log('ola')
+            // Insert url into an <img> tag to "download"
+          })
+          // All the items under listRef.
+        })
+      })
+      .catch(error => {
+        // Uh-oh, an error occurred!
+      })
+  }
   React.useEffect(() => {
-    let query
     auth.onAuthStateChanged(user => {
       if (user) {
-        const profilePicUrl =
-          getCurrentUser().photoURL || '/images/profile_placeholder.png'
-        const userName = getCurrentUser().displayName
-        const uid = getCurrentUser().uid
-
-        dispatch({
-          type: StoreActions.LOGIN,
-          data: {
-            loggedIn: true,
-            user: { profilePicUrl, userName, uid }
-          }
-        })
-      } else {
-        dispatch({ type: StoreActions.LOGOUT })
+        loadTops()
       }
     })
-    return () => query
+    //eslint-disable-next-line
   }, [dispatch])
 }
