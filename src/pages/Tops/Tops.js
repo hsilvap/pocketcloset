@@ -3,7 +3,16 @@ import { makeStyles } from '@material-ui/core/styles'
 import TopBar from '../../components/TopBar/TopBar'
 import { UseStoreContext } from '../../context/store'
 import { LoadTops } from '../../hooks/useDb'
-import { Container, Grid, ImageList, Typography } from '@material-ui/core'
+import {
+  Backdrop,
+  CircularProgress,
+  Container,
+  Grid,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+  Typography
+} from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   heroContent: {
@@ -57,9 +66,23 @@ const Tops = () => {
           </Container>
         </div>
         <Container maxWidth='lg'>
-          <ImageList rowHeight={160} cols={4}></ImageList>
+          <ImageList cols={3}>
+            {state.tops.data.map(item => (
+              <ImageListItem key={item.url} style={{ height: 'auto' }}>
+                <img src={item.url} alt={item.title} />
+                <ImageListItemBar title={item.name} />
+              </ImageListItem>
+            ))}
+          </ImageList>
         </Container>
       </main>
+      <Backdrop
+        style={{ zIndex: 2 }}
+        sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
+        open={state.tops.loading}
+      >
+        <CircularProgress color='inherit' />
+      </Backdrop>
     </React.Fragment>
   )
 }

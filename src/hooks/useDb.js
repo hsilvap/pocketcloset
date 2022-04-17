@@ -78,29 +78,14 @@ export function LoadTops () {
   const loadTops = async () => {
     const tops = []
     const listRef = ref(storage, `${getCurrentUser().uid}/tops`)
-    // Find all the prefixes and items.
-    listAll(listRef)
-      .then(res => {
-        res.prefixes.forEach(folderRef => {
-          // All the prefixes under listRef.
-          // You may call listAll() recursively on them.
-        })
-        res.items.forEach(itemRef => {
-          console.log(itemRef.fullPath, itemRef.name)
-          const fileRef = ref(storage, itemRef.fullPath)
 
-          // Get the download URL
-          getDownloadURL(fileRef).then(url => {
-            console.log(url)
-            console.log('ola')
-            // Insert url into an <img> tag to "download"
-          })
-          // All the items under listRef.
-        })
-      })
-      .catch(error => {
-        // Uh-oh, an error occurred!
-      })
+    const res = await listAll(listRef)
+    for (let itemRef of res.items) {
+      const fileRef = ref(storage, itemRef.fullPath)
+      const url = await getDownloadURL(fileRef)
+      tops.push({ name: itemRef.name, url })
+    }
+    dispatch({ type: StoreActions.SET_TOPS, data: tops })
   }
   React.useEffect(() => {
     auth.onAuthStateChanged(user => {

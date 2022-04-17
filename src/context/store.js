@@ -4,7 +4,8 @@ import { StoreReducer } from './reducer'
 export const initialState = {
   loggedIn: false,
   drawerOpen: false,
-  user: {}
+  user: {},
+  tops: { loading: true, data: [] }
 }
 
 export const StoreContext = React.createContext()
