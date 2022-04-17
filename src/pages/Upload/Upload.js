@@ -163,6 +163,24 @@ const Upload = () => {
             maxFileSize={5242880}
             withPreview
             label='Max file size: 5mb, accepted: jpg, png'
+            buttonStyles={{
+              color: ' #fff',
+              backgroundColor: '#3f51b5',
+              boxShadow:
+                '0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%)',
+              padding: ' 6px 16px',
+              fontSize: '0.875rem',
+              minWidth: '64px',
+              boxSizing: ' border-box',
+              transition:
+                'background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+              fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"',
+              fontWeight: 500,
+              lineHeight: 1.75,
+              borderRadius: 4,
+              letterSpacing: '0.02857em',
+              textTransform: 'uppercase'
+            }}
           />
         </Container>
         <Divider />
@@ -185,6 +203,24 @@ const Upload = () => {
             maxFileSize={5242880}
             withPreview
             label='Max file size: 5mb, accepted: jpg, png'
+            buttonStyles={{
+              color: ' #fff',
+              backgroundColor: '#3f51b5',
+              boxShadow:
+                '0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%)',
+              padding: ' 6px 16px',
+              fontSize: '0.875rem',
+              minWidth: '64px',
+              boxSizing: ' border-box',
+              transition:
+                'background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+              fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"',
+              fontWeight: 500,
+              lineHeight: 1.75,
+              borderRadius: 4,
+              letterSpacing: '0.02857em',
+              textTransform: 'uppercase'
+            }}
           />
         </Container>
       </main>
