@@ -49,7 +49,12 @@ const Tops = () => {
           </Container>
         </div>
         <Container maxWidth='lg'>
-          <ImageList cols={3}>
+          <ImageList
+            sx={{ width: 500, height: 450 }}
+            variant='woven'
+            cols={3}
+            gap={8}
+          >
             {state.tops.data.map(item => (
               <ImageListItem key={item.url} style={{ height: 'auto' }}>
                 <img src={item.url} alt={item.title} />

@@ -38,8 +38,12 @@ const TopBar = () => {
   }, [])
 
   const handleOpenDrawer = React.useCallback(() => {
-    dispatch({ type: StoreActions.OPEN_DRAWER })
-  }, [dispatch])
+    if (state.loggedIn) {
+      dispatch({ type: StoreActions.OPEN_DRAWER })
+    } else {
+      signIn()
+    }
+  }, [dispatch, state, signIn])
 
   return (
     <>
