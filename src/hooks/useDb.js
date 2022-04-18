@@ -83,7 +83,7 @@ export function LoadTops () {
     for (let itemRef of res.items) {
       const fileRef = ref(storage, itemRef.fullPath)
       const url = await getDownloadURL(fileRef)
-      tops.push({ name: itemRef.name, url })
+      tops.push({ name: itemRef.name, url, featured: Math.random() < 0.33 })
     }
     dispatch({ type: StoreActions.SET_TOPS, data: tops })
   }

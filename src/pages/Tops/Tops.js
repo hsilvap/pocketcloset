@@ -19,27 +19,10 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(8, 0, 6)
   },
-  heroButtons: {
-    marginTop: theme.spacing(4)
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8)
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  cardMedia: {
-    paddingTop: '56.25%' // 16:9
-  },
-  cardContent: {
-    flexGrow: 1
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6)
+  titleBar: {
+    background:
+      'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+      'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)'
   }
 }))
 
@@ -70,7 +53,11 @@ const Tops = () => {
             {state.tops.data.map(item => (
               <ImageListItem key={item.url} style={{ height: 'auto' }}>
                 <img src={item.url} alt={item.title} />
-                <ImageListItemBar title={item.name} />
+                <ImageListItemBar
+                  title={item.name}
+                  className={classes.titleBar}
+                  position='top'
+                />
               </ImageListItem>
             ))}
           </ImageList>
