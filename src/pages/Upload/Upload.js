@@ -193,7 +193,6 @@ const Upload = () => {
           >
             Upload Bottoms
           </Typography>
-          <Button></Button>
 
           <ImageUploader
             withIcon={true}

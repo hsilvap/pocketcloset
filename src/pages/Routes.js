@@ -4,6 +4,7 @@ import { ROUTES } from '../constants'
 import { UseStoreContext } from '../context/store'
 import { LoadUserInfo } from '../hooks/useDb'
 import Bottoms from './Bottoms/Bottoms'
+import Compare from './Compare/Compare'
 import Landing from './Landing/Landing'
 import Tops from './Tops/Tops'
 import Upload from './Upload/Upload'
@@ -35,7 +36,7 @@ const PocketClosetRouter = () => {
         />
         <Route
           path={ROUTES.COMPARE}
-          element={isAllowed ? <Landing /> : <Navigate replace to='/' />}
+          element={isAllowed ? <Compare /> : <Navigate replace to='/' />}
         />
       </Routes>
     </BrowserRouter>
