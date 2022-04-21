@@ -4,7 +4,7 @@ import { getStorage, ref, uploadBytes, deleteObject } from 'firebase/storage'
 import { makeStyles } from '@material-ui/core/styles'
 import TopBar from '../../components/TopBar/TopBar'
 import { UseStoreContext } from '../../context/store'
-import { LoadTops } from '../../hooks/useDb'
+import { LoadBottoms } from '../../hooks/useDb'
 import {
   Backdrop,
   CircularProgress,
@@ -31,19 +31,22 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Tops = ({ width }) => {
-  LoadTops()
-
+const Bottoms = ({ width }) => {
+  LoadBottoms()
   const { state, dispatch } = UseStoreContext()
+
   const storage = getStorage()
   const classes = useStyles()
   const isMobile = isWidthDown('sm', width)
 
-  const handleImageDelete = async top => {
+  const handleImageDelete = async bottom => {
     try {
-      const fileDeleteRef = ref(storage, `${state.user.uid}/tops/${top.name}`)
+      const fileDeleteRef = ref(
+        storage,
+        `${state.user.uid}/bottoms/${bottom.name}`
+      )
       await deleteObject(fileDeleteRef)
-      dispatch({ type: StoreActions.DELETE_TOP, data: top })
+      dispatch({ type: StoreActions.DELETE_BOTTOM, data: bottom })
     } catch (error) {
       console.error(error)
     } finally {
@@ -62,7 +65,7 @@ const Tops = ({ width }) => {
               color='textPrimary'
               gutterBottom
             >
-              My Tops
+              My Bottoms
             </Typography>
           </Container>
         </div>
@@ -72,7 +75,7 @@ const Tops = ({ width }) => {
             cols={isMobile ? 1 : 3}
             gap={8}
           >
-            {state.tops.data.map(item => (
+            {state.bottoms.data.map(item => (
               <ImageListItem key={item.url} style={{ height: 'auto' }}>
                 <img src={item.url} alt={item.name} />
                 <ImageListItemBar
@@ -99,7 +102,7 @@ const Tops = ({ width }) => {
       <Backdrop
         style={{ zIndex: 2 }}
         sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
-        open={state.tops.loading}
+        open={state.bottoms.loading}
       >
         <CircularProgress color='inherit' />
       </Backdrop>
@@ -107,4 +110,4 @@ const Tops = ({ width }) => {
   )
 }
 
-export default withWidth()(Tops)
+export default withWidth()(Bottoms)

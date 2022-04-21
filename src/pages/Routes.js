@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ROUTES } from '../constants'
 import { UseStoreContext } from '../context/store'
 import { LoadUserInfo } from '../hooks/useDb'
+import Bottoms from './Bottoms/Bottoms'
 import Landing from './Landing/Landing'
 import Tops from './Tops/Tops'
 import Upload from './Upload/Upload'
@@ -26,7 +27,7 @@ const PocketClosetRouter = () => {
         />
         <Route
           path={ROUTES.BOTTOMS}
-          element={isAllowed ? <Landing /> : <Navigate replace to='/' />}
+          element={isAllowed ? <Bottoms /> : <Navigate replace to='/' />}
         />
         <Route
           path={ROUTES.UPLOAD}

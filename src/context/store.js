@@ -5,7 +5,8 @@ export const initialState = {
   loggedIn: false,
   drawerOpen: false,
   user: {},
-  tops: { loading: true, data: [] }
+  tops: { loading: true, data: [] },
+  bottoms: { loading: true, data: [] }
 }
 
 export const StoreContext = React.createContext()

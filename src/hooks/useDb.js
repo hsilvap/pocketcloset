@@ -37,29 +37,17 @@ export function LoadBottoms () {
   const storage = getStorage()
 
   const loadBottoms = async () => {
+    dispatch({ type: StoreActions.LOAD_BOTTOMS })
+    const bottoms = []
     const listRef = ref(storage, `${getCurrentUser().uid}/bottoms`)
-    // Find all the prefixes and items.
-    listAll(listRef)
-      .then(res => {
-        res.prefixes.forEach(folderRef => {
-          // All the prefixes under listRef.
-          // You may call listAll() recursively on them.
-        })
-        res.items.forEach(itemRef => {
-          console.log(itemRef.fullPath)
-          const fileRef = ref(storage, itemRef.fullPath)
 
-          // Get the download URL
-          getDownloadURL(fileRef).then(url => {
-            console.log(url)
-            // Insert url into an <img> tag to "download"
-          })
-          // All the items under listRef.
-        })
-      })
-      .catch(error => {
-        // Uh-oh, an error occurred!
-      })
+    const res = await listAll(listRef)
+    for (let itemRef of res.items) {
+      const fileRef = ref(storage, itemRef.fullPath)
+      const url = await getDownloadURL(fileRef)
+      bottoms.push({ name: itemRef.name, url, featured: Math.random() < 0.33 })
+    }
+    dispatch({ type: StoreActions.SET_BOTTOMS, data: bottoms })
   }
   React.useEffect(() => {
     auth.onAuthStateChanged(user => {
@@ -76,6 +64,7 @@ export function LoadTops () {
   const storage = getStorage()
 
   const loadTops = async () => {
+    dispatch({ type: StoreActions.LOAD_TOPS })
     const tops = []
     const listRef = ref(storage, `${getCurrentUser().uid}/tops`)
 
