@@ -1,7 +1,6 @@
 import React from 'react'
 import ImageUploader from 'react-images-upload'
-import { getStorage, ref, uploadBytes, deleteObject } from 'firebase/storage'
-
+import { getStorage, ref, uploadBytes, deleteObject, listAll, getDownloadURL } from 'firebase/storage'
 import TopBar from '../../components/TopBar/TopBar'
 import {
   Backdrop,
@@ -9,23 +8,38 @@ import {
   CircularProgress,
   Container,
   Divider,
+  FormControlLabel,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+  isWidthDown,
+  Radio,
+  RadioGroup,
   Snackbar,
-  Typography
+  Typography,
+  withWidth
 } from '@material-ui/core'
 import { useStyles } from './styles'
 import { UseStoreContext } from '../../context/store'
 
-const Compare = () => {
+const Compare = ({ width }) => {
   const classes = useStyles()
   const storage = getStorage()
+  const isMobile = isWidthDown('sm', width)
 
   const { state } = UseStoreContext()
+  const [value, setValue] = React.useState('tops');
   const [file, setFile] = React.useState([])
+  const [similarClothes, setSimilarClothes] = React.useState([])
   const [isUploading, setIsUploading] = React.useState(false)
   const [requestStatus, setRequestStatus] = React.useState({
     open: false,
     text: ''
   })
+
+  const handleChange = (event) => {
+    setValue((event.target).value);
+  };
 
   const uploadFile = React.useCallback(
     async tops => {
@@ -82,6 +96,33 @@ const Compare = () => {
     [file, deleteFile, uploadFile]
   )
 
+  const handleFindOutClick = React.useCallback(async () => {
+    setIsUploading(true)
+    setSimilarClothes([])
+    fetch(`http://localhost:8000/repeated-clothes/${value}/${state.user.uid}`)
+      .then(response => response.json())
+      .then(async (data) => {
+        const { filename_list } = data
+
+        const listRef = ref(storage, `${state.user.uid}/${value}`)
+        const imageList = []
+        const res = await listAll(listRef)
+        for (let itemRef of res.items) {
+          if (filename_list.some(i => i === itemRef.name)) {
+            const fileRef = ref(storage, itemRef.fullPath)
+            const url = await getDownloadURL(fileRef)
+            imageList.push({ name: itemRef.name, url })
+          }
+        }
+
+        setSimilarClothes(imageList)
+      }).finally(k => {
+        setIsUploading(false)
+      });
+
+
+  }, [value, state.user, storage])
+
   return (
     <div className={classes.main}>
       <TopBar />
@@ -96,11 +137,21 @@ const Compare = () => {
           >
             See if you already have something similar
           </Typography>
-
+          <RadioGroup
+            row
+            name="row-radio-buttons-group"
+            style={{ justifyContent: 'center' }}
+            value={value}
+            onChange={handleChange}
+          >
+            <FormControlLabel value="tops" control={<Radio color="primary" />} label="Top" />
+            <FormControlLabel value="bottoms" control={<Radio color="primary" />} label="Bottom" />
+          </RadioGroup>
           {file.length >= 1 && (
             <Button
               variant='contained'
               color='primary'
+              onClick={handleFindOutClick}
               style={{ display: 'block', margin: '0 auto' }}
             >
               Find out!
@@ -151,6 +202,33 @@ const Compare = () => {
             </Typography>
           </Container>
         )}
+        {similarClothes.length > 0 && <Container maxWidth='lg'>
+          <Typography
+            component='h3'
+            variant='h4'
+            align='center'
+            color='textPrimary'
+            gutterBottom
+          >
+            Similar clothes found
+          </Typography>
+          <ImageList
+            sx={{ width: 500, height: 450 }}
+            cols={isMobile ? 1 : 3}
+            gap={8}
+          >
+            {similarClothes.map(item => (
+              <ImageListItem key={item.url} style={{ height: 'auto' }}>
+                <img src={item.url} alt={item.name} />
+                <ImageListItemBar
+                  title={item.name}
+                  className={classes.titleBar}
+                  position='top'
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Container>}
       </main>
       <Backdrop
         style={{ zIndex: 2 }}
@@ -172,4 +250,4 @@ const Compare = () => {
   )
 }
 
-export default Compare
+export default withWidth()(Compare)
