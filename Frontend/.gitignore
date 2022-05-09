@@ -19,8 +19,8 @@
 .env.test.local
 .env.production.local
 Frontend/node_modules
-Backend/tmp/*
-Backend/key.json
+/Backend/tmp/*
+/Backend/key.json
 
 npm-debug.log*
 yarn-debug.log*
