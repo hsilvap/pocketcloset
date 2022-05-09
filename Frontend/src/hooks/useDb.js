@@ -1,11 +1,10 @@
 import React from 'react'
-import { collection, query } from 'firebase/firestore'
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage'
 import { StoreContext } from '../context/store'
 import { StoreActions } from '../context/reducer'
-import { auth, getCurrentUser, db } from '../db'
+import { auth, getCurrentUser } from '../db'
 
-export function LoadUserInfo () {
+export function LoadUserInfo() {
   const { dispatch } = React.useContext(StoreContext)
 
   React.useEffect(() => {
@@ -32,7 +31,7 @@ export function LoadUserInfo () {
   }, [dispatch])
 }
 
-export function LoadBottoms () {
+export function LoadBottoms() {
   const { dispatch } = React.useContext(StoreContext)
   const storage = getStorage()
 
@@ -59,7 +58,7 @@ export function LoadBottoms () {
   }, [dispatch])
 }
 
-export function LoadTops () {
+export function LoadTops() {
   const { dispatch } = React.useContext(StoreContext)
   const storage = getStorage()
 

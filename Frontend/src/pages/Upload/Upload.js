@@ -5,7 +5,6 @@ import { getStorage, ref, uploadBytes, deleteObject } from 'firebase/storage'
 import TopBar from '../../components/TopBar/TopBar'
 import {
   Backdrop,
-  Button,
   CircularProgress,
   Container,
   Divider,

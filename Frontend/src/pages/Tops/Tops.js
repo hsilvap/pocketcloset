@@ -1,5 +1,5 @@
 import React from 'react'
-import { getStorage, ref, uploadBytes, deleteObject } from 'firebase/storage'
+import { getStorage, ref, deleteObject } from 'firebase/storage'
 
 import { makeStyles } from '@material-ui/core/styles'
 import TopBar from '../../components/TopBar/TopBar'

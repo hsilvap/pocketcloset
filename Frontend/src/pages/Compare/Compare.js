@@ -37,6 +37,8 @@ const Compare = ({ width }) => {
     text: ''
   })
 
+
+  console.log(similarClothes, file)
   const handleChange = (event) => {
     setValue((event.target).value);
   };
@@ -61,15 +63,17 @@ const Compare = ({ width }) => {
     [storage, state.user]
   )
 
-  const deleteFile = React.useCallback(
-    async file => {
+  const deleteFiles = React.useCallback(
+    async () => {
       setIsUploading(true)
       try {
-        const fileDeleteRef = ref(
-          storage,
-          `${state.user.uid}/compare/${file.name}`
-        )
-        await deleteObject(fileDeleteRef)
+        const listRef = ref(storage, `${state.user.uid}/compare`)
+        const res = await listAll(listRef)
+
+        for (let itemRef of res.items) {
+          await deleteObject(itemRef)
+        }
+
       } catch (error) {
         console.error(error)
       } finally {
@@ -81,19 +85,12 @@ const Compare = ({ width }) => {
 
   const onDropTops = React.useCallback(
     async picture => {
-      if (picture.length < file.length) {
-        for (let i = 0; i < file.length; i++) {
-          const exists = picture.find(x => x.name === file[i].name)
-          if (!exists) {
-            deleteFile(file[i])
-          }
-        }
-      } else {
-        uploadFile(picture)
-      }
+      setSimilarClothes([])
+      await deleteFiles()
+      await uploadFile(picture)
       setFile([...picture])
     },
-    [file, deleteFile, uploadFile]
+    [deleteFiles, uploadFile]
   )
 
   const handleFindOutClick = React.useCallback(async () => {
@@ -189,46 +186,49 @@ const Compare = ({ width }) => {
           />
         </Container>
         <Divider />
-        {file.length > 1 && (
-          <Container maxWidth='sm'>
-            <Typography
-              component='h3'
-              variant='h4'
-              align='center'
-              color='textPrimary'
-              gutterBottom
-            >
-              Results
-            </Typography>
-          </Container>
+        {file.length >= 1 && similarClothes.length > 0 && (
+          <>
+            <Container maxWidth='sm'>
+              <Typography
+                component='h3'
+                variant='h4'
+                align='center'
+                color='textPrimary'
+                gutterBottom
+              >
+                Results
+              </Typography>
+            </Container>
+            <Container maxWidth='lg'>
+              <Typography
+                component='h3'
+                variant='h4'
+                align='center'
+                color='textPrimary'
+                gutterBottom
+              >
+                Similar clothes found
+              </Typography>
+              <ImageList
+                sx={{ width: 500, height: 450 }}
+                cols={isMobile ? 1 : 3}
+                gap={8}
+              >
+                {similarClothes.map(item => (
+                  <ImageListItem key={item.url} style={{ height: 'auto' }}>
+                    <img src={item.url} alt={item.name} />
+                    <ImageListItemBar
+                      title={item.name}
+                      className={classes.titleBar}
+                      position='top'
+                    />
+                  </ImageListItem>
+                ))}
+              </ImageList>
+            </Container>
+          </>
         )}
-        {similarClothes.length > 0 && <Container maxWidth='lg'>
-          <Typography
-            component='h3'
-            variant='h4'
-            align='center'
-            color='textPrimary'
-            gutterBottom
-          >
-            Similar clothes found
-          </Typography>
-          <ImageList
-            sx={{ width: 500, height: 450 }}
-            cols={isMobile ? 1 : 3}
-            gap={8}
-          >
-            {similarClothes.map(item => (
-              <ImageListItem key={item.url} style={{ height: 'auto' }}>
-                <img src={item.url} alt={item.name} />
-                <ImageListItemBar
-                  title={item.name}
-                  className={classes.titleBar}
-                  position='top'
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
-        </Container>}
+
       </main>
       <Backdrop
         style={{ zIndex: 2 }}
