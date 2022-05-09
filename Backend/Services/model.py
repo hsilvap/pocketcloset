@@ -16,7 +16,7 @@ import shutil
 
 class Model:
     config = {
-        "apiKey": "AIzaSyCF8Nx6KkB0svOLuHoMyZtQTKoHdfULQwY",
+        "apiKey": "",
         "authDomain": "pocketcloset-345616.firebaseapp.com",
         "databaseURL": "https://pocketcloset-345616-default-rtdb.firebaseio.com",
         "projectId": "pocketcloset-345616",
@@ -87,7 +87,7 @@ class Model:
         }
 
     # Function to Extract features from the images
-    def image_feature(self,direc):
+    def image_feature(self, direc):
         model = InceptionV3(
             include_top=True,
             weights="imagenet",

@@ -8,7 +8,7 @@ import { getFirestore } from 'firebase/firestore'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyCF8Nx6KkB0svOLuHoMyZtQTKoHdfULQwY',
+  apiKey: '',
   authDomain: 'pocketcloset-345616.firebaseapp.com',
   databaseURL: 'https://pocketcloset-345616-default-rtdb.firebaseio.com',
   projectId: 'pocketcloset-345616',
