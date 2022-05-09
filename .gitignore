@@ -8,7 +8,7 @@
 /.pnp
 .pnp.js
 .env
-.pyc
+*.pyc
 
 # testing
 /coverage
